@@ -1,0 +1,28 @@
+{
+    "name": "listoread",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "run-p type-check \"build-only {@}\" --",
+        "preview": "vite preview",
+        "build-only": "vite build",
+        "type-check": "vue-tsc --build --force"
+    },
+    "dependencies": {
+        "firebase": "^10.7.2",
+        "vue": "^3.4.15",
+        "vuefire": "^3.1.22"
+    },
+    "devDependencies": {
+        "@tsconfig/node18": "^18.2.2",
+        "@types/node": "^20.11.7",
+        "@vitejs/plugin-vue": "^5.0.3",
+        "@vue/tsconfig": "^0.5.1",
+        "npm-run-all2": "^6.1.1",
+        "typescript": "~5.3.3",
+        "vite": "^5.0.12",
+        "vue-tsc": "^1.8.27"
+    }
+}
