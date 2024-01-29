@@ -7,6 +7,7 @@ import { useIsCurrentUserLoaded } from "vuefire";
         <header>
             <nav>
                 <RouterLink to="/">Home</RouterLink>
+                <RouterLink to="/upload">Upload</RouterLink>
             </nav>
         </header>
         <RouterView />
