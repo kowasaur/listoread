@@ -6,6 +6,21 @@ export interface Author {
     given_name: string;
     surname: string;
     surname_first?: boolean;
+    uploader: string;
+}
+
+export interface Book {
+    title: string;
+    authors: Author[];
+    uploader: string;
+}
+
+export interface Edition {
+    title: string;
+    books: Book[];
+    publisher: string;
+    url?: string;
+    uploader: string;
 }
 
 export const firebaseApp = initializeApp({

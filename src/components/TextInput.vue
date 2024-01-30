@@ -7,6 +7,8 @@ const { field, label } = defineProps<{
 </script>
 
 <template>
-    <label :for="field">{{ label }}</label>
-    <input type="text" :name="field" :id="field" :required="required" />
+    <div>
+        <label :for="field">{{ label }}</label>
+        <input type="text" :name="field" :id="field" :required="required" />
+    </div>
 </template>

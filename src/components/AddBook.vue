@@ -4,6 +4,7 @@ import { addDoc, doc } from "firebase/firestore";
 import { authorsRef, booksRef, type Author } from "@/firebase";
 import { inputValue } from "@/utils";
 import TextInput from "./TextInput.vue";
+import RefInput from "./RefInput.vue";
 
 // TODO: https://stackoverflow.com/questions/46568142/google-firestore-query-on-substring-of-a-property-value-text-search
 // Current implementation will not work well once there's a lot of authors
@@ -25,15 +26,13 @@ async function bookSubmit(event: Event) {
 <template>
     <h2>Upload Book</h2>
     <form @submit.prevent="bookSubmit">
-        <TextInput field="title" label="Title" />
+        <TextInput field="title" label="Title" required />
 
         <!-- TODO: multiple authors -->
-        <label for="author">Author</label>
-        <select name="author" id="author">
-            <option v-for="author in all_authors" :value="author.id">
-                {{ author.given_name + " " + author.surname }}
-            </option>
-        </select>
+        <RefInput label="Author" field="author" :collection="all_authors" v-slot="{ doc }">
+            {{ doc.given_name }} {{ doc.surname }}
+        </RefInput>
+
         <button>Upload</button>
     </form>
 </template>
