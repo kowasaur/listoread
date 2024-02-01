@@ -23,3 +23,11 @@ const user = useCurrentUser();
     </template>
     <h2 v-else>Loading...</h2>
 </template>
+
+<style scoped>
+nav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
+}
+</style>

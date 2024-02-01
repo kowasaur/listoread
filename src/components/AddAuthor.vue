@@ -13,6 +13,7 @@ async function authorSubmit(event: Event) {
         uploader: user.value!.uid,
         given_name: inputValue("given_name"),
         surname: inputValue("surname"),
+        surname_first: (<HTMLInputElement>document.getElementById("surname_first")).checked,
     });
     alert("Author uploaded successfully");
     (<HTMLFormElement>event.target).reset();
@@ -22,8 +23,12 @@ async function authorSubmit(event: Event) {
 <template>
     <h2>Upload Author</h2>
     <form @submit.prevent="authorSubmit">
+        <TextInput field="given_name" label="Given Name" required />
         <TextInput field="surname" label="Surname" required />
-        <TextInput field="given_name" label="Given Name" />
+        <div>
+            <label for="surname_first">Surname should display first</label>
+            <input type="checkbox" name="surname_first" id="surname_first" />
+        </div>
         <button type="submit">Upload</button>
     </form>
 </template>

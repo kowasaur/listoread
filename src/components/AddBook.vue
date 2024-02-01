@@ -2,7 +2,7 @@
 import { useCollection, useCurrentUser } from "vuefire";
 import { addDoc, doc } from "firebase/firestore";
 import { authorsRef, booksRef, type Author } from "@/firebase";
-import { inputValue } from "@/utils";
+import { fullName, inputValue } from "@/utils";
 import TextInput from "./TextInput.vue";
 import RefInput from "./RefInput.vue";
 
@@ -30,7 +30,7 @@ async function bookSubmit(event: Event) {
 
         <!-- TODO: multiple authors -->
         <RefInput label="Author" field="author" :collection="all_authors" v-slot="{ doc }">
-            {{ doc.given_name }} {{ doc.surname }}
+            {{ fullName(doc) }}
         </RefInput>
 
         <button>Upload</button>

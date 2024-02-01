@@ -1,12 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider } from "firebase/auth";
-import { collection, getFirestore } from "firebase/firestore";
+import { Timestamp, collection, getFirestore } from "firebase/firestore";
 
 export interface Author {
     given_name: string;
     surname: string;
     surname_first?: boolean;
     uploader: string;
+    readonly id: string; // added by VueFire
 }
 
 export interface Publisher {
@@ -17,6 +18,7 @@ export interface Book {
     title: string;
     authors: Author[];
     uploader: string;
+    readonly id: string; // added by VueFire
 }
 
 export interface Edition {
@@ -32,6 +34,15 @@ export interface Edition {
 
 export interface ListItem {
     edition: Edition;
+    uploader: string;
+}
+
+export interface Reading {
+    edition: Edition;
+    book: Book;
+    start?: Timestamp;
+    finish?: Timestamp;
+    notes?: string;
     uploader: string;
 }
 
@@ -53,3 +64,4 @@ export const publishersRef = collection(db, "publishers");
 export const booksRef = collection(db, "books");
 export const editionsRef = collection(db, "editions");
 export const listItemsRef = collection(db, "list_items");
+export const readingsRef = collection(db, "readings");
