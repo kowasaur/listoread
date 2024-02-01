@@ -17,9 +17,16 @@ export interface Book {
 
 export interface Edition {
     title: string;
+    subtitle?: string;
     books: Book[];
     publisher: string;
     url?: string;
+    uploader: string;
+    readonly id: string; // added by VueFire
+}
+
+export interface ListItem {
+    edition: Edition;
     uploader: string;
 }
 
@@ -39,3 +46,4 @@ const db = getFirestore(firebaseApp);
 export const authorsRef = collection(db, "authors");
 export const booksRef = collection(db, "books");
 export const editionsRef = collection(db, "editions");
+export const listItemsRef = collection(db, "list_items");
