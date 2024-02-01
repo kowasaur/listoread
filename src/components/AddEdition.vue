@@ -1,26 +1,32 @@
 <script setup lang="ts">
 import { useCollection, useCurrentUser } from "vuefire";
 import { addDoc, doc } from "firebase/firestore";
-import { booksRef, type Book, editionsRef } from "@/firebase";
+import { booksRef, type Book, editionsRef, publishersRef, type Publisher } from "@/firebase";
 import { inputValue } from "@/utils";
 import TextInput from "./TextInput.vue";
 import RefInput from "./RefInput.vue";
 
-const all_books = useCollection<Book>(booksRef);
+const allBooks = useCollection<Book>(booksRef);
+const publishers = useCollection<Publisher>(publishersRef);
 
 const user = useCurrentUser();
 
 async function editionSubmit(event: Event) {
-    const subtitle = inputValue("subtitle");
-    await addDoc(editionsRef, {
+    const data: Record<string, any> = {
         // TODO: maybe don't assume not null
         uploader: user.value!.uid,
         title: inputValue("edition-title"),
-        ...(subtitle && { subtitle }),
+        subtitle: inputValue("subtitle"),
         books: [doc(booksRef, inputValue("book"))],
-        publisher: inputValue("publisher"),
+        publisher: doc(publishersRef, inputValue("edition-publisher")),
         url: inputValue("url"),
-    });
+        img_url: inputValue("img_url"),
+    };
+
+    // get rid of empty (optional) fields
+    Object.keys(data).forEach(k => data[k] === "" && delete data[k]);
+
+    await addDoc(editionsRef, data);
     alert("Edition uploaded successfully");
     (<HTMLFormElement>event.target).reset();
 }
@@ -31,12 +37,19 @@ async function editionSubmit(event: Event) {
     <form @submit.prevent="editionSubmit">
         <TextInput field="edition-title" label="Title" required />
         <TextInput field="subtitle" label="Subtitle" />
-        <RefInput field="book" label="Book" :collection="all_books" v-slot="{ doc }">
+        <RefInput field="book" label="Book" :collection="allBooks" v-slot="{ doc }">
             {{ doc.title }} by {{ doc.authors[0].surname }}
         </RefInput>
-        <!-- TODO: convert from text to a ref -->
-        <TextInput field="publisher" label="Publisher" required />
+        <RefInput
+            field="edition-publisher"
+            label="Publisher"
+            :collection="publishers"
+            v-slot="{ doc }"
+        >
+            {{ doc.publisher }}
+        </RefInput>
         <TextInput field="url" label="URL" />
+        <TextInput field="img_url" label="Image URL" />
         <button>Upload</button>
     </form>
 </template>

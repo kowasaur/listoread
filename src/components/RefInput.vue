@@ -12,7 +12,7 @@ const { collection } = defineProps<{
     <div>
         <label :for="field">{{ label }}</label>
         <select :name="field" :id="field">
-            <option v-for="doc in collection" :value="doc.id">
+            <option v-for="doc in collection" :key="doc.id" :value="doc.id">
                 <slot :doc="doc"></slot>
             </option>
         </select>

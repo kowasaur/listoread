@@ -1,1 +1,2 @@
-export const inputValue = (id: string) => (<HTMLInputElement>document.getElementById(id)).value;
+export const inputValue = (id: string) =>
+    (<HTMLInputElement>document.getElementById(id)).value.trim();

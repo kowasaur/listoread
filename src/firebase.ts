@@ -9,6 +9,10 @@ export interface Author {
     uploader: string;
 }
 
+export interface Publisher {
+    publisher: string;
+}
+
 export interface Book {
     title: string;
     authors: Author[];
@@ -21,6 +25,7 @@ export interface Edition {
     books: Book[];
     publisher: string;
     url?: string;
+    img_url?: string;
     uploader: string;
     readonly id: string; // added by VueFire
 }
@@ -44,6 +49,7 @@ export const googleAuthProvider = new GoogleAuthProvider();
 const db = getFirestore(firebaseApp);
 
 export const authorsRef = collection(db, "authors");
+export const publishersRef = collection(db, "publishers");
 export const booksRef = collection(db, "books");
 export const editionsRef = collection(db, "editions");
 export const listItemsRef = collection(db, "list_items");

@@ -36,6 +36,10 @@ async function listItemSubmit(event: Event) {
     </form>
 
     <div>
+        <aside>
+            <h2>Currently Reading</h2>
+        </aside>
+
         <h2>Other</h2>
         <ol>
             <li v-for="item in listItems">{{ item.edition.title }}</li>
