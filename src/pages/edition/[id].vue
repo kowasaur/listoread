@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { booksRef, readingsRef, editionsRef, type Edition } from "@/firebase";
+import { booksRef, readingsRef, editionsRef, type Edition, type Reading } from "@/firebase";
 import { fullName } from "@/utils";
-import { addDoc, doc, serverTimestamp } from "firebase/firestore";
+import { addDoc, doc, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { computed } from "vue";
 import { useRouter } from "vue-router/auto";
 import { useRoute } from "vue-router/auto";
-import { useCurrentUser, useDocument } from "vuefire";
+import { useCollection, useCurrentUser, useDocument } from "vuefire";
 
 const route = useRoute("/edition/[id]");
 const router = useRouter();
@@ -15,6 +15,12 @@ const editionDoc = doc(editionsRef, route.params.id);
 const { pending, data: edition } = useDocument<Edition>(editionDoc);
 const authors = computed(() => [...new Set(edition.value?.books.flatMap(b => b.authors))]);
 
+const readings = useCollection<Reading>(
+    query(readingsRef, where("uploader", "==", user.value?.uid), where("edition", "==", editionDoc))
+);
+
+const currentlyReading = computed(() => readings.value.find(r => !r.finish));
+
 async function startReading() {
     await addDoc(readingsRef, {
         uploader: user.value!.uid,
@@ -23,6 +29,10 @@ async function startReading() {
         start: serverTimestamp(),
     });
     router.push("/");
+}
+
+function finishReading() {
+    updateDoc(doc(readingsRef, currentlyReading.value?.id), { finish: serverTimestamp() });
 }
 </script>
 
@@ -42,7 +52,27 @@ async function startReading() {
                 }}</RouterLink>
             </h3>
 
-            <button @click="startReading">Start Reading</button>
+            <template v-if="user">
+                <button v-if="!currentlyReading" @click="startReading">Start Reading</button>
+                <button v-else @click="finishReading">Finish Reading</button>
+
+                <h3>Readings</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Start</th>
+                            <th scope="col">Finish</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="r in readings">
+                            <td>{{ r.start?.toDate().toLocaleString("en-au") }}</td>
+                            <td>{{ r.finish?.toDate().toLocaleString("en-au") }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+
             <!-- TODO: other relavent information -->
         </main>
     </div>
