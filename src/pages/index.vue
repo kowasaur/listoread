@@ -12,6 +12,7 @@ import {
 import RefInput from "@/components/RefInput.vue";
 import { fullName, inputValue } from "@/utils";
 import { computed } from "vue";
+import WholeList from "@/components/WholeList.vue";
 
 const user = useCurrentUser();
 const whereUser = where("uploader", "==", user.value!.uid);
@@ -28,7 +29,7 @@ const editions = computed(() =>
 const readings = useCollection<Reading>(query(readingsRef, whereUser));
 const currentReads = computed(() => readings.value.filter(r => !r.finish));
 
-async function listItemSubmit(event: Event) {
+async function listItemSubmit() {
     await addDoc(listItemsRef, {
         // TODO: maybe don't assume not null
         uploader: user.value!.uid,
@@ -46,7 +47,7 @@ async function listItemSubmit(event: Event) {
         <button @click.prevent="listItemSubmit">Add to List</button>
     </form>
 
-    <div>
+    <div class="homepage">
         <aside>
             <h2>Currently Reading</h2>
             <div v-for="read in currentReads">
@@ -61,11 +62,13 @@ async function listItemSubmit(event: Event) {
             </div>
         </aside>
 
-        <h2>Other</h2>
-        <ol>
-            <li v-for="item in listItems" :key="item.id">
-                <RouterLink :to="'edition/' + item.edition.id">{{ item.edition.title }}</RouterLink>
-            </li>
-        </ol>
+        <WholeList />
     </div>
 </template>
+
+<style scoped>
+.homepage {
+    display: flex;
+    flex-direction: row;
+}
+</style>

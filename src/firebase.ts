@@ -2,40 +2,47 @@ import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider } from "firebase/auth";
 import { Timestamp, collection, getFirestore } from "firebase/firestore";
 
-export interface Author {
+interface Doc {
+    uploader: string;
+    readonly id: string; // added by VueFire
+}
+
+export interface Author extends Doc {
     given_name: string;
     surname: string;
     surname_first?: boolean;
-    uploader: string;
-    readonly id: string; // added by VueFire
 }
 
-export interface Publisher {
+export interface Publisher extends Doc {
     publisher: string;
 }
 
-export interface Book {
+export interface Book extends Doc {
     title: string;
     authors: Author[];
-    uploader: string;
-    readonly id: string; // added by VueFire
 }
 
-export interface Edition {
+export interface Edition extends Doc {
     title: string;
     subtitle?: string;
     books: Book[];
     publisher: string;
     url?: string;
     img_url?: string;
-    uploader: string;
-    readonly id: string; // added by VueFire
 }
 
-export interface ListItem {
+export interface ListItem extends Doc {
     edition: Edition;
-    uploader: string;
+    group: ListGroup | null;
 }
+
+export interface ListGroup extends Doc {
+    order: number;
+    name: string;
+    colour: string;
+}
+
+export type LocalListGroup = ListGroup | Pick<ListGroup, "id" | "name">;
 
 export interface Reading {
     edition: Edition;
@@ -64,4 +71,5 @@ export const publishersRef = collection(db, "publishers");
 export const booksRef = collection(db, "books");
 export const editionsRef = collection(db, "editions");
 export const listItemsRef = collection(db, "list_items");
+export const listGroupsRef = collection(db, "list_groups");
 export const readingsRef = collection(db, "readings");

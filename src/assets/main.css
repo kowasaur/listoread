@@ -9,3 +9,11 @@ body {
     display: flex;
     justify-content: center;
 }
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
