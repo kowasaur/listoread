@@ -26,7 +26,7 @@ export interface Edition extends Doc {
     title: string;
     subtitle?: string;
     books: Book[];
-    publisher: string;
+    publisher: Publisher;
     url?: string;
     img_url?: string;
 }

@@ -2,7 +2,6 @@ body {
     /* height: 100vh; */
     margin: 0;
     background-color: cornsilk;
-    padding: 1em;
 }
 
 .container {
@@ -28,4 +27,20 @@ a:hover {
     display: block;
     width: 100%;
     box-sizing: border-box;
+}
+
+/* Link to thing with picture */
+.piece {
+    display: flex;
+    flex-direction: column;
+    /* place-items: center; */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 1em;
+    max-width: 12em;
+}
+
+.piece > * {
+    display: block;
 }

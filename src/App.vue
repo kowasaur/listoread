@@ -13,13 +13,16 @@ const user = useCurrentUser();
             <nav>
                 <RouterLink to="/">Home</RouterLink>
                 <RouterLink to="/upload">Upload</RouterLink>
+                <RouterLink to="/edition/all">Editions</RouterLink>
                 <button v-if="user" @click="signOut(auth)">Sign Out</button>
                 <button v-else @click="signInWithPopup(auth, googleAuthProvider)">
                     Sign In With Google
                 </button>
             </nav>
         </header>
-        <RouterView />
+        <div class="page-content">
+            <RouterView />
+        </div>
     </template>
     <h2 v-else>Loading...</h2>
 </template>
@@ -28,6 +31,11 @@ const user = useCurrentUser();
 nav {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1em;
+    background-color: lightgreen;
+    padding: 1em;
+}
+
+.page-content {
+    padding: 1em;
 }
 </style>

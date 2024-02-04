@@ -19,7 +19,7 @@ async function editionSubmit(event: Event, uploader: string) {
         uploader,
         title: inputValue("edition-title"),
         subtitle: inputValue("subtitle"),
-        books: [doc(booksRef, inputValue("book"))],
+        books: selectedBooks.value.map(b => doc(booksRef, b)),
         publisher: doc(publishersRef, inputValue("edition-publisher")),
         url: inputValue("url"),
         img_url: inputValue("img_url"),

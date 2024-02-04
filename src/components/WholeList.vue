@@ -99,5 +99,6 @@ main {
     border-style: solid;
     border-width: 1px;
     border-radius: 0.5em;
+    min-width: 12em;
 }
 </style>
