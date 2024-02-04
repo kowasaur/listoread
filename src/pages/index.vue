@@ -13,9 +13,10 @@ import RefInput from "@/components/RefInput.vue";
 import { fullName, inputValue } from "@/utils";
 import { computed } from "vue";
 import WholeList from "@/components/WholeList.vue";
+import RequireSignIn from "@/components/RequireSignIn.vue";
 
 const user = useCurrentUser();
-const whereUser = where("uploader", "==", user.value!.uid);
+const whereUser = where("uploader", "==", user.value?.uid ?? null);
 const listItems = useCollection<ListItem>(query(listItemsRef, whereUser));
 
 const userEditionIds = computed(() => listItems.value.map(l => l.edition.id));
@@ -41,30 +42,32 @@ async function listItemSubmit() {
 </script>
 
 <template>
-    <form>
-        <RefInput field="edition" label="Edition" :collection="editions" v-slot="{ doc }">
-            {{ doc.title }} by {{ doc.books[0].authors[0].surname }}
-        </RefInput>
-        <button @click.prevent="listItemSubmit">Add to List</button>
-    </form>
+    <RequireSignIn>
+        <form>
+            <RefInput field="edition" label="Edition" :collection="editions" v-slot="{ doc }">
+                {{ doc.title }} by {{ doc.books[0].authors[0].surname }}
+            </RefInput>
+            <button @click.prevent="listItemSubmit">Add to List</button>
+        </form>
 
-    <div class="homepage">
-        <aside>
-            <h2>Currently Reading</h2>
-            <div v-for="read in currentReads">
-                <img
-                    v-if="read.edition.img_url"
-                    :src="read.edition.img_url"
-                    alt="Picture of the book"
-                    height="100"
-                />
-                <h5>{{ read.edition.title }}</h5>
-                <h6>{{ fullName(read.book.authors[0]) }}</h6>
-            </div>
-        </aside>
+        <div class="homepage">
+            <aside>
+                <h2>Currently Reading</h2>
+                <div v-for="read in currentReads">
+                    <img
+                        v-if="read.edition.img_url"
+                        :src="read.edition.img_url"
+                        alt="Picture of the book"
+                        height="100"
+                    />
+                    <h5>{{ read.edition.title }}</h5>
+                    <h6>{{ fullName(read.book.authors[0]) }}</h6>
+                </div>
+            </aside>
 
-        <WholeList />
-    </div>
+            <WholeList />
+        </div>
+    </RequireSignIn>
 </template>
 
 <style scoped>

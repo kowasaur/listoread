@@ -47,9 +47,11 @@ function finishReading() {
             <h3>
                 By
                 <!-- TODO: multiple authors -->
-                <RouterLink v-for="(a, i) in authors" :to="`authors/${a.id}`">{{
-                    fullName(a)
-                }}</RouterLink>
+                <template v-for="(a, i) in authors" :to="`authors/${a.id}`">
+                    <RouterLink :to="`authors/${a.id}`">{{ fullName(a) }}</RouterLink>
+                    <template v-if="i === authors.length - 2"> and </template>
+                    <template v-else-if="i < authors.length - 1">, </template>
+                </template>
             </h3>
 
             <template v-if="user">

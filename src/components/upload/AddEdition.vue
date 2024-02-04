@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { useCollection } from "vuefire";
 import { addDoc, doc } from "firebase/firestore";
+import { ref } from "vue";
 import { booksRef, type Book, editionsRef, publishersRef, type Publisher } from "@/firebase";
 import { inputValue } from "@/utils";
 import TextInput from "@/components/TextInput.vue";
 import RefInput from "@/components/RefInput.vue";
 import AddForm from "./AddForm.vue";
+import MultiRef from "../MultiRef.vue";
 
 const allBooks = useCollection<Book>(booksRef);
 const publishers = useCollection<Publisher>(publishersRef);
+
+const selectedBooks = ref<string[]>([""]);
 
 async function editionSubmit(event: Event, uploader: string) {
     const data: Record<string, any> = {
@@ -34,9 +38,15 @@ async function editionSubmit(event: Event, uploader: string) {
     <AddForm name="Edition" @submit="editionSubmit">
         <TextInput field="edition-title" label="Title" required />
         <TextInput field="subtitle" label="Subtitle" />
-        <RefInput field="book" label="Book" :collection="allBooks" v-slot="{ doc }">
-            {{ doc.title }} by {{ doc.authors[0].surname }}
-        </RefInput>
+        <MultiRef
+            v-model="selectedBooks"
+            field="book"
+            label="Book"
+            :collection="allBooks"
+            v-slot="{ doc }"
+        >
+            {{ doc.title }} by {{ doc.authors.map(a => a.surname).join(", ") }}
+        </MultiRef>
         <RefInput
             field="edition-publisher"
             label="Publisher"

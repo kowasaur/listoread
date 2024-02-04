@@ -14,7 +14,6 @@ async function authorSubmit(event: Event, uploader: string) {
     });
     alert("Author uploaded successfully");
     (<HTMLFormElement>event.target).reset();
-    getInputById("author").value = newAuthor.id;
 }
 </script>
 
