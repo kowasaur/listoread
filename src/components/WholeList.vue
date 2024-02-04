@@ -16,7 +16,7 @@ import { inputValue } from "@/utils";
 import Draggable from "vuedraggable";
 import { ref, watchEffect } from "vue";
 
-const OTHER: LocalListGroup = { name: "Other", id: "other" };
+const OTHER: LocalListGroup = { name: "Other", id: "other", colour: "#e9e3c7" };
 
 // TODO: maybe accept prop from index.vue instead
 const user = useCurrentUser();
@@ -48,9 +48,9 @@ async function createGroup(event: Event) {
     (<HTMLFormElement>event.target).reset();
 }
 
-type groupChange = { moved: { element: LocalListGroup; newIndex: number; oldIndex: number } };
+type GroupChange = { moved: { element: LocalListGroup; newIndex: number; oldIndex: number } };
 // TODO: Consider using debounce to save money
-function groupMoved({ moved }: groupChange) {
+function groupMoved({ moved }: GroupChange) {
     const start = Math.min(moved.newIndex, moved.oldIndex);
     const end = Math.max(moved.newIndex, moved.oldIndex);
     const gs = localGroups.value;
@@ -90,10 +90,11 @@ function groupMoved({ moved }: groupChange) {
 main {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .list-group {
-    margin: 1em;
+    margin: 0.7em;
     padding: 5px;
     border-style: solid;
     border-width: 1px;

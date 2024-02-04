@@ -42,7 +42,7 @@ export interface ListGroup extends Doc {
     colour: string;
 }
 
-export type LocalListGroup = ListGroup | Pick<ListGroup, "id" | "name">;
+export type LocalListGroup = ListGroup | Omit<ListGroup, "order" | "uploader">;
 
 export interface Reading {
     edition: Edition;

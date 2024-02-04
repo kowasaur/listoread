@@ -2,13 +2,13 @@
 import { addDoc } from "firebase/firestore";
 import { useCurrentUser } from "vuefire";
 import { authorsRef } from "../firebase";
-import { inputValue } from "@/utils";
+import { getInputById, inputValue } from "@/utils";
 import TextInput from "./TextInput.vue";
 
 const user = useCurrentUser();
 
 async function authorSubmit(event: Event) {
-    await addDoc(authorsRef, {
+    const newAuthor = await addDoc(authorsRef, {
         // TODO: maybe don't assume not null
         uploader: user.value!.uid,
         given_name: inputValue("given_name"),
@@ -17,6 +17,7 @@ async function authorSubmit(event: Event) {
     });
     alert("Author uploaded successfully");
     (<HTMLFormElement>event.target).reset();
+    getInputById("author").value = newAuthor.id;
 }
 </script>
 

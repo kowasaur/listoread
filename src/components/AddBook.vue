@@ -2,7 +2,7 @@
 import { useCollection, useCurrentUser } from "vuefire";
 import { addDoc, doc } from "firebase/firestore";
 import { authorsRef, booksRef, type Author } from "@/firebase";
-import { fullName, inputValue } from "@/utils";
+import { fullName, getInputById, inputValue } from "@/utils";
 import TextInput from "./TextInput.vue";
 import RefInput from "./RefInput.vue";
 
@@ -13,13 +13,16 @@ const all_authors = useCollection<Author>(authorsRef);
 const user = useCurrentUser();
 
 async function bookSubmit(event: Event) {
-    await addDoc(booksRef, {
+    const newBook = await addDoc(booksRef, {
         // TODO: maybe don't assume not null
         uploader: user.value!.uid,
         title: inputValue("title"),
         authors: [doc(authorsRef, inputValue("author"))],
     });
     alert("Book uploaded successfully");
+    getInputById("edition-title").value = inputValue("title");
+    getInputById("title").value = "";
+    getInputById("book").value = newBook.id;
 }
 </script>
 
