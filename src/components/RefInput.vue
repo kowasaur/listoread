@@ -9,7 +9,7 @@ const { collection } = defineProps<{
 </script>
 
 <template>
-    <div>
+    <div class="form-input">
         <label :for="field">{{ label }}</label>
         <select :name="field" :id="field">
             <option v-for="doc in collection" :key="doc.id" :value="doc.id">

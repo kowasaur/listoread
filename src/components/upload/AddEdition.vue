@@ -1,20 +1,18 @@
 <script setup lang="ts">
-import { useCollection, useCurrentUser } from "vuefire";
+import { useCollection } from "vuefire";
 import { addDoc, doc } from "firebase/firestore";
 import { booksRef, type Book, editionsRef, publishersRef, type Publisher } from "@/firebase";
 import { inputValue } from "@/utils";
-import TextInput from "./TextInput.vue";
-import RefInput from "./RefInput.vue";
+import TextInput from "@/components/TextInput.vue";
+import RefInput from "@/components/RefInput.vue";
+import AddForm from "./AddForm.vue";
 
 const allBooks = useCollection<Book>(booksRef);
 const publishers = useCollection<Publisher>(publishersRef);
 
-const user = useCurrentUser();
-
-async function editionSubmit(event: Event) {
+async function editionSubmit(event: Event, uploader: string) {
     const data: Record<string, any> = {
-        // TODO: maybe don't assume not null
-        uploader: user.value!.uid,
+        uploader,
         title: inputValue("edition-title"),
         subtitle: inputValue("subtitle"),
         books: [doc(booksRef, inputValue("book"))],
@@ -33,8 +31,7 @@ async function editionSubmit(event: Event) {
 </script>
 
 <template>
-    <h2>Upload Edition</h2>
-    <form @submit.prevent="editionSubmit">
+    <AddForm name="Edition" @submit="editionSubmit">
         <TextInput field="edition-title" label="Title" required />
         <TextInput field="subtitle" label="Subtitle" />
         <RefInput field="book" label="Book" :collection="allBooks" v-slot="{ doc }">
@@ -50,6 +47,5 @@ async function editionSubmit(event: Event) {
         </RefInput>
         <TextInput field="url" label="URL" />
         <TextInput field="img_url" label="Image URL" />
-        <button>Upload</button>
-    </form>
+    </AddForm>
 </template>

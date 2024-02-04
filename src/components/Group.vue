@@ -4,7 +4,7 @@ import { doc, query, updateDoc, where } from "firebase/firestore";
 import { useCollection } from "vuefire";
 import GroupItem from "./GroupItem.vue";
 import Draggable from "vuedraggable";
-import { computed, nextTick, ref, watch, watchEffect } from "vue";
+import { ref, watch } from "vue";
 
 const { group } = defineProps<{ group: LocalListGroup }>();
 
@@ -18,7 +18,7 @@ function sortItems() {
     localItems.value.sort((a, b) => a.edition.title.localeCompare(b.edition.title));
 }
 
-watch(listItems, sortItems, { immediate: true });
+watch(listItems, sortItems);
 
 async function itemMoved({ added }: { added?: { element: ListItem } }) {
     if (!added) return; // fired on where it's removed from as well
@@ -45,3 +45,10 @@ async function itemMoved({ added }: { added?: { element: ListItem } }) {
         </template>
     </Draggable>
 </template>
+
+<style scoped>
+h2 {
+    margin: 0.2em;
+    margin-bottom: 0.3em;
+}
+</style>

@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { addDoc } from "firebase/firestore";
-import { useCurrentUser } from "vuefire";
-import { publishersRef } from "../firebase";
+import { publishersRef } from "@/firebase";
 import { getInputById, inputValue } from "@/utils";
-import TextInput from "./TextInput.vue";
+import TextInput from "@/components/TextInput.vue";
+import AddForm from "./AddForm.vue";
 
-const user = useCurrentUser();
-
-async function publisherSubmit(event: Event) {
+async function publisherSubmit(event: Event, uploader: string) {
     const newPub = await addDoc(publishersRef, {
-        // TODO: maybe don't assume not null
-        uploader: user.value!.uid,
+        uploader,
         publisher: inputValue("publisher"),
     });
     alert("Publisher uploaded successfully");
@@ -20,9 +17,7 @@ async function publisherSubmit(event: Event) {
 </script>
 
 <template>
-    <h2>Upload Publisher</h2>
-    <form @submit.prevent="publisherSubmit">
+    <AddForm name="Publisher" @submit="publisherSubmit">
         <TextInput field="publisher" label="Publisher" required />
-        <button type="submit">Upload</button>
-    </form>
+    </AddForm>
 </template>

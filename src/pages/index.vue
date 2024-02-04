@@ -34,6 +34,7 @@ async function listItemSubmit() {
         // TODO: maybe don't assume not null
         uploader: user.value!.uid,
         edition: doc(editionsRef, inputValue("edition")),
+        group: null,
     });
     alert("Book uploaded successfully");
 }

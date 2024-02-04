@@ -7,7 +7,7 @@ const { field, label } = defineProps<{
 </script>
 
 <template>
-    <div>
+    <div class="form-input">
         <label :for="field">{{ label }}</label>
         <input type="text" :name="field" :id="field" :required="required" />
     </div>

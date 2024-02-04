@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import AddBook from "@/components/AddBook.vue";
-import AddAuthor from "../components/AddAuthor.vue";
-import AddEdition from "@/components/AddEdition.vue";
-import AddPublisher from "@/components/AddPublisher.vue";
+import AddBook from "@/components/upload/AddBook.vue";
+import AddAuthor from "../components/upload/AddAuthor.vue";
+import AddEdition from "@/components/upload/AddEdition.vue";
+import AddPublisher from "@/components/upload/AddPublisher.vue";
 </script>
 
 <template>
-    <h1>Upload</h1>
-    <!-- TODO: make it so Editions, Books and Authors are here and they can be minimised -->
-    <AddAuthor />
-    <AddPublisher />
-    <AddBook />
-    <AddEdition />
+    <!-- TODO: make it so each "tab" can be minimised -->
+    <div class="uploads">
+        <AddAuthor />
+        <AddPublisher />
+        <AddBook />
+        <AddEdition />
+    </div>
 </template>
+
+<style scoped>
+.uploads {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+</style>

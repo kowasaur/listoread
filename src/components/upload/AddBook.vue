@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import { useCollection, useCurrentUser } from "vuefire";
+import { useCollection } from "vuefire";
 import { addDoc, doc } from "firebase/firestore";
 import { authorsRef, booksRef, type Author } from "@/firebase";
 import { fullName, getInputById, inputValue } from "@/utils";
-import TextInput from "./TextInput.vue";
-import RefInput from "./RefInput.vue";
+import TextInput from "@/components/TextInput.vue";
+import RefInput from "@/components/RefInput.vue";
+import AddForm from "./AddForm.vue";
 
 // TODO: https://stackoverflow.com/questions/46568142/google-firestore-query-on-substring-of-a-property-value-text-search
 // Current implementation will not work well once there's a lot of authors
 const all_authors = useCollection<Author>(authorsRef);
 
-const user = useCurrentUser();
-
-async function bookSubmit(event: Event) {
+async function bookSubmit(_: Event, uploader: string) {
     const newBook = await addDoc(booksRef, {
-        // TODO: maybe don't assume not null
-        uploader: user.value!.uid,
+        uploader,
         title: inputValue("title"),
         authors: [doc(authorsRef, inputValue("author"))],
     });
@@ -27,15 +25,12 @@ async function bookSubmit(event: Event) {
 </script>
 
 <template>
-    <h2>Upload Book</h2>
-    <form @submit.prevent="bookSubmit">
+    <AddForm name="Book" @submit="bookSubmit">
         <TextInput field="title" label="Title" required />
 
         <!-- TODO: multiple authors -->
         <RefInput label="Author" field="author" :collection="all_authors" v-slot="{ doc }">
             {{ fullName(doc) }}
         </RefInput>
-
-        <button>Upload</button>
-    </form>
+    </AddForm>
 </template>

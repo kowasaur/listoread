@@ -1,5 +1,5 @@
 body {
-    height: 100vh;
+    /* height: 100vh; */
     margin: 0;
     background-color: cornsilk;
     padding: 1em;
@@ -18,4 +18,13 @@ a:visited {
 
 a:hover {
     text-decoration: underline;
+}
+
+.form-input {
+    margin-bottom: 0.5em;
+}
+
+.form-input > * {
+    display: block;
+    width: 100%;
 }
