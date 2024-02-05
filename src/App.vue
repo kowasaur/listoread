@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useIsCurrentUserLoaded, useFirebaseAuth, useCurrentUser } from "vuefire";
 import { signInWithPopup, signOut } from "firebase/auth";
+import { ModalsContainer } from "vue-final-modal";
 import { googleAuthProvider } from "./firebase";
 
 const auth = useFirebaseAuth()!;
@@ -25,6 +26,7 @@ const user = useCurrentUser();
         </div>
     </template>
     <h2 v-else>Loading...</h2>
+    <ModalsContainer />
 </template>
 
 <style scoped>

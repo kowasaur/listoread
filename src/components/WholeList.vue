@@ -95,7 +95,7 @@ main {
 
 .list-group {
     margin: 0.7em;
-    padding: 0.4em;
+    padding: 0.7em;
     border-style: solid;
     border-width: 1px;
     border-radius: 0.5em;

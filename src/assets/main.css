@@ -7,6 +7,12 @@ body {
 .container {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+img {
+    font-size: 0;
 }
 
 a,
@@ -17,6 +23,10 @@ a:visited {
 
 a:hover {
     text-decoration: underline;
+}
+
+h2 {
+    margin-top: 0;
 }
 
 .form-input {

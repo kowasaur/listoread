@@ -20,7 +20,8 @@ defineProps<{ edition: Edition }>();
 .outer {
     display: flex;
     align-items: center;
-    margin: 0.3em;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
     padding: 0.5em;
 }
 
@@ -42,6 +43,7 @@ defineProps<{ edition: Edition }>();
 }
 
 img {
-    margin-right: 0.4em;
+    /* Needs to be rem so font-size: 0 doesn't break the margin */
+    margin-right: 0.4rem;
 }
 </style>

@@ -31,6 +31,7 @@ async function editionSubmit(event: Event, uploader: string) {
     await addDoc(editionsRef, data);
     alert("Edition uploaded successfully");
     (<HTMLFormElement>event.target).reset();
+    selectedBooks.value = [""];
 }
 </script>
 
