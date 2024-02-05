@@ -1,7 +1,13 @@
 body {
-    /* height: 100vh; */
     margin: 0;
     background-color: cornsilk;
+    --main-padding: 1em;
+}
+
+#app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
@@ -9,6 +15,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    padding: var(--main-padding);
 }
 
 img {

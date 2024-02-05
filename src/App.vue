@@ -21,9 +21,7 @@ const user = useCurrentUser();
                 </button>
             </nav>
         </header>
-        <div class="page-content">
-            <RouterView />
-        </div>
+        <RouterView />
     </template>
     <h2 v-else>Loading...</h2>
     <ModalsContainer />
@@ -34,10 +32,6 @@ nav {
     display: flex;
     justify-content: space-between;
     background-color: lightgreen;
-    padding: 1em;
-}
-
-.page-content {
     padding: 1em;
 }
 </style>

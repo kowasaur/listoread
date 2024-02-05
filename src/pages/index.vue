@@ -22,14 +22,17 @@ const currentReads = computed(() => readings.value.filter(r => !r.finish));
             <aside>
                 <h2>Currently Reading</h2>
                 <div v-for="read in currentReads">
-                    <img
-                        v-if="read.edition.img_url"
-                        :src="read.edition.img_url"
-                        alt="Picture of the book"
-                        height="100"
-                    />
-                    <h5>{{ read.edition.title }}</h5>
-                    <h6>{{ fullName(read.book.authors[0]) }}</h6>
+                    <RouterLink :to="`/edition/${read.edition.id}`">
+                        <img
+                            v-if="read.edition.img_url"
+                            :src="read.edition.img_url"
+                            alt="Picture of the book"
+                        />
+                        <div v-else>
+                            <h5>{{ read.edition.title }}</h5>
+                            <h6>{{ fullName(read.book.authors[0]) }}</h6>
+                        </div>
+                    </RouterLink>
                 </div>
             </aside>
 
@@ -39,8 +42,26 @@ const currentReads = computed(() => readings.value.filter(r => !r.finish));
 </template>
 
 <style scoped>
+aside {
+    background-color: bisque;
+    padding: var(--main-padding);
+}
+
 .homepage {
     display: flex;
     flex-direction: row;
+    flex-grow: 1;
+}
+
+img {
+    width: 7rem;
+}
+
+h5 {
+    margin-bottom: 0;
+}
+
+h6 {
+    margin-top: 0.2rem;
 }
 </style>

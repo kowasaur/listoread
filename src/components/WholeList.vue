@@ -91,6 +91,7 @@ main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    padding: var(--main-padding);
 }
 
 .list-group {

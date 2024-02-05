@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { booksRef, readingsRef, editionsRef, type Edition, type Reading } from "@/firebase";
-import { fullName } from "@/utils";
-import { addDoc, doc, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { computed } from "vue";
-import { useRouter } from "vue-router/auto";
-import { useRoute } from "vue-router/auto";
 import { useCollection, useCurrentUser, useDocument } from "vuefire";
+import { addDoc, doc, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
+import { useRoute, useRouter } from "vue-router/auto";
+import { booksRef, readingsRef, editionsRef, type Edition, type Reading } from "@/firebase";
+import BookTitleAuthors from "@/components/BookTitleAuthors.vue";
 
 const route = useRoute("/edition/[id]");
 const router = useRouter();
@@ -37,7 +36,7 @@ async function startReading() {
 }
 
 function finishReading() {
-    updateDoc(doc(readingsRef, currentlyReading.value?.id), { finish: serverTimestamp() });
+    updateDoc(doc(readingsRef, currentlyReading.value!.id), { finish: serverTimestamp() });
 }
 </script>
 
@@ -47,20 +46,13 @@ function finishReading() {
     <div v-else class="container">
         <img v-if="edition.img_url" :src="edition.img_url" alt="Picture of the book" width="200" />
         <main>
-            <h2>{{ edition.title }}</h2>
-            <h4>{{ edition.subtitle }}</h4>
-            <h3>
-                By
-                <template v-for="(a, i) in authors" :to="`authors/${a.id}`">
-                    <RouterLink :to="`authors/${a.id}`">{{ fullName(a) }}</RouterLink>
-                    <template v-if="i === authors.length - 2"> and </template>
-                    <template v-else-if="i < authors.length - 1">, </template>
-                </template>
-            </h3>
+            <BookTitleAuthors :title="edition.title" :authors="authors">
+                <h4>{{ edition.subtitle }}</h4>
+            </BookTitleAuthors>
 
             <p v-if="edition.books.length === 1">
                 An edition of
-                <RouterLink :to="`books/${edition.books[0].id}`">
+                <RouterLink :to="`/book/${edition.books[0].id}`">
                     <i>{{ edition.books[0].title }}</i>
                 </RouterLink>
                 published by {{ edition.publisher.publisher
@@ -77,7 +69,7 @@ function finishReading() {
                 </p>
                 <ul>
                     <li v-for="book in edition.books">
-                        <RouterLink :to="`book/${book.id}`">
+                        <RouterLink :to="`/book/${book.id}`">
                             <i> {{ book.title }} </i>
                         </RouterLink>
                     </li>
