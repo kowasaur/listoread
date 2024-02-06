@@ -7,6 +7,7 @@ import { readingsRef, editionsRef, type Edition, type Reading, whereUser } from 
 import { editionAuthors } from "@/utils";
 import BookTitleAuthors from "@/components/BookTitleAuthors.vue";
 import ToggleReading from "@/components/ToggleReading.vue";
+import ReadingRow from "@/components/ReadingRow.vue";
 
 const route = useRoute("/edition/[id]");
 const user = useCurrentUser();
@@ -14,6 +15,7 @@ const user = useCurrentUser();
 const editionDoc = doc(editionsRef, route.params.id);
 const { pending, data: edition } = useDocument<Edition>(editionDoc, { wait: true });
 
+const notCollection = computed(() => edition.value?.books.length === 1);
 const authors = computed(() => (edition.value ? editionAuthors(edition.value) : []));
 
 const readings = useCollection<Reading>(
@@ -32,7 +34,7 @@ const readings = useCollection<Reading>(
                 <h4>{{ edition.subtitle }}</h4>
             </BookTitleAuthors>
 
-            <template v-if="edition.books.length === 1">
+            <template v-if="notCollection">
                 <p>
                     An edition of
                     <RouterLink :to="`/book/${edition.books[0].id}`">
@@ -78,15 +80,18 @@ const readings = useCollection<Reading>(
                 <table>
                     <thead>
                         <tr>
+                            <th v-if="!notCollection">Book</th>
                             <th scope="col">Start</th>
                             <th scope="col">Finish</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="r in readings">
-                            <td>{{ r.start?.toDate().toLocaleString("en-au") }}</td>
-                            <td>{{ r.finish?.toDate().toLocaleString("en-au") }}</td>
-                        </tr>
+                        <ReadingRow
+                            v-for="r in readings"
+                            :key="r.id"
+                            :reading="r"
+                            :not-collection="notCollection"
+                        />
                     </tbody>
                 </table>
             </template>

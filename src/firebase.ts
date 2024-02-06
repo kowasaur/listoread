@@ -44,13 +44,11 @@ export interface ListGroup extends Doc {
 
 export type LocalListGroup = ListGroup | Omit<ListGroup, "order" | "uploader">;
 
-export interface Reading {
+export interface Reading extends Doc {
     edition: Edition;
     book: Book;
     start?: Timestamp;
     finish: Timestamp | null;
-    notes?: string;
-    uploader: string;
 }
 
 export const firebaseApp = initializeApp({
