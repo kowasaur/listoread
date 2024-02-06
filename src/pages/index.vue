@@ -28,10 +28,7 @@ const currentReads = computed(() => readings.value.filter(r => !r.finish));
                             :src="read.edition.img_url"
                             alt="Picture of the book"
                         />
-                        <div v-else>
-                            <h5>{{ read.edition.title }}</h5>
-                            <h6>{{ fullName(read.book.authors[0]) }}</h6>
-                        </div>
+                        <h5>{{ read.book.title }}</h5>
                     </RouterLink>
                 </div>
             </aside>
@@ -45,6 +42,7 @@ const currentReads = computed(() => readings.value.filter(r => !r.finish));
 aside {
     background-color: bisque;
     padding: var(--main-padding);
+    text-align: center;
 }
 
 .homepage {
@@ -58,10 +56,6 @@ img {
 }
 
 h5 {
-    margin-bottom: 0;
-}
-
-h6 {
-    margin-top: 0.2rem;
+    margin-top: 0;
 }
 </style>

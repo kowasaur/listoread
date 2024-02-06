@@ -1,43 +1,25 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useCollection, useCurrentUser, useDocument } from "vuefire";
-import { addDoc, doc, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
-import { useRoute, useRouter } from "vue-router/auto";
-import { booksRef, readingsRef, editionsRef, type Edition, type Reading } from "@/firebase";
+import { doc, query, where } from "firebase/firestore";
+import { useRoute } from "vue-router/auto";
+import { readingsRef, editionsRef, type Edition, type Reading, whereUser } from "@/firebase";
+import { editionAuthors } from "@/utils";
 import BookTitleAuthors from "@/components/BookTitleAuthors.vue";
+import ToggleReading from "@/components/ToggleReading.vue";
 
 const route = useRoute("/edition/[id]");
-const router = useRouter();
 const user = useCurrentUser();
 
 const editionDoc = doc(editionsRef, route.params.id);
-const { pending, data: edition } = useDocument<Edition>(editionDoc);
+const { pending, data: edition } = useDocument<Edition>(editionDoc, { wait: true });
 
-const authors = computed(() =>
-    (edition.value?.books ?? [])
-        .flatMap(b => b.authors)
-        .filter((a, i, all) => all.findIndex(a2 => a2.id === a.id) === i)
-);
+const authors = computed(() => (edition.value ? editionAuthors(edition.value) : []));
 
 const readings = useCollection<Reading>(
-    query(readingsRef, where("uploader", "==", user.value?.uid), where("edition", "==", editionDoc))
+    query(readingsRef, whereUser(user.value), where("edition", "==", editionDoc)),
+    { ssrKey: "edition/[id]" }
 );
-
-const currentlyReading = computed(() => readings.value.find(r => !r.finish));
-
-async function startReading() {
-    await addDoc(readingsRef, {
-        uploader: user.value!.uid,
-        edition: editionDoc,
-        book: doc(booksRef, edition.value?.books[0].id),
-        start: serverTimestamp(),
-    });
-    router.push("/");
-}
-
-function finishReading() {
-    updateDoc(doc(readingsRef, currentlyReading.value!.id), { finish: serverTimestamp() });
-}
 </script>
 
 <template>
@@ -50,15 +32,23 @@ function finishReading() {
                 <h4>{{ edition.subtitle }}</h4>
             </BookTitleAuthors>
 
-            <p v-if="edition.books.length === 1">
-                An edition of
-                <RouterLink :to="`/book/${edition.books[0].id}`">
-                    <i>{{ edition.books[0].title }}</i>
-                </RouterLink>
-                published by {{ edition.publisher.publisher
-                }}<template v-if="edition.url"> available <a :href="edition.url">here</a> </template
-                >.
-            </p>
+            <template v-if="edition.books.length === 1">
+                <p>
+                    An edition of
+                    <RouterLink :to="`/book/${edition.books[0].id}`">
+                        <i>{{ edition.books[0].title }}</i>
+                    </RouterLink>
+                    published by {{ edition.publisher.publisher
+                    }}<template v-if="edition.url">
+                        available <a :href="edition.url">here</a> </template
+                    >.
+                </p>
+                <ToggleReading
+                    :edition-doc="editionDoc"
+                    :book="edition.books[0]"
+                    :readings="readings"
+                />
+            </template>
             <template v-else>
                 <p>
                     An edition published by {{ edition.publisher.publisher }}
@@ -69,17 +59,21 @@ function finishReading() {
                 </p>
                 <ul>
                     <li v-for="book in edition.books">
-                        <RouterLink :to="`/book/${book.id}`">
-                            <i> {{ book.title }} </i>
-                        </RouterLink>
+                        <div>
+                            <RouterLink :to="`/book/${book.id}`">
+                                <i> {{ book.title }} </i>
+                            </RouterLink>
+                            <ToggleReading
+                                :edition-doc="editionDoc"
+                                :book="book"
+                                :readings="readings"
+                            />
+                        </div>
                     </li>
                 </ul>
             </template>
 
             <template v-if="user">
-                <button v-if="!currentlyReading" @click="startReading">Start Reading</button>
-                <button v-else @click="finishReading">Finish Reading</button>
-
                 <h3>Readings</h3>
                 <table>
                     <thead>
@@ -106,5 +100,14 @@ function finishReading() {
 .container > * {
     margin-left: 1em;
     margin-right: 1em;
+}
+
+img {
+    align-self: flex-start;
+}
+
+li > div {
+    display: flex;
+    justify-content: space-between;
 }
 </style>

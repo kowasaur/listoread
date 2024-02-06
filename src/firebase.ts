@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { GoogleAuthProvider } from "firebase/auth";
-import { Timestamp, collection, getFirestore } from "firebase/firestore";
+import { GoogleAuthProvider, type User } from "firebase/auth";
+import { Timestamp, collection, getFirestore, where } from "firebase/firestore";
 
 interface Doc {
     uploader: string;
@@ -48,7 +48,7 @@ export interface Reading {
     edition: Edition;
     book: Book;
     start?: Timestamp;
-    finish?: Timestamp;
+    finish: Timestamp | null;
     notes?: string;
     uploader: string;
 }
@@ -73,3 +73,6 @@ export const editionsRef = collection(db, "editions");
 export const listItemsRef = collection(db, "list_items");
 export const listGroupsRef = collection(db, "list_groups");
 export const readingsRef = collection(db, "readings");
+
+export const whereUser = (user: User | undefined | null) =>
+    where("uploader", "==", user?.uid ?? null);
