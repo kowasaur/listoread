@@ -6,11 +6,17 @@ import { fullName } from "@/utils";
 defineProps<{
     title: string;
     authors: Author[];
+    showEdit?: boolean;
 }>();
+
+defineEmits<{ editClick: [] }>();
 </script>
 
 <template>
-    <h2>{{ title }}</h2>
+    <h2 class="space-between">
+        <div>{{ title }}</div>
+        <button v-if="showEdit" @click="$emit('editClick')">Edit</button>
+    </h2>
     <slot></slot>
     <h3>
         By

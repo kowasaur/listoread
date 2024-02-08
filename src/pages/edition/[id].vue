@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useCollection, useCurrentUser, useDocument } from "vuefire";
-import { doc, where } from "firebase/firestore";
+import { doc, setDoc, where } from "firebase/firestore";
 import { useRoute } from "vue-router/auto";
+import { VueFinalModal } from "vue-final-modal";
 import { readingsRef, editionsRef, type Edition, type Reading, whereUser } from "@/firebase";
 import { editionAuthors } from "@/utils";
 import BookTitleAuthors from "@/components/BookTitleAuthors.vue";
 import ToggleReading from "@/components/ToggleReading.vue";
 import ReadingRow from "@/components/ReadingRow.vue";
 import ModalReading from "@/components/ModalReading.vue";
+import EditionForm from "@/components/upload/EditionForm.vue";
 
 const route = useRoute("/edition/[id]");
 const user = useCurrentUser();
@@ -24,7 +26,13 @@ const readings = useCollection<Reading>(
     { ssrKey: "edition/[id]" }
 );
 
-const showModal = ref(false);
+const showReadingModal = ref(false);
+const showEditModal = ref(false);
+
+async function editEdition(data: Record<string, any>) {
+    await setDoc(editionDoc, data);
+    showEditModal.value = false;
+}
 </script>
 
 <template>
@@ -33,7 +41,12 @@ const showModal = ref(false);
     <div v-else class="container">
         <img v-if="edition.img_url" :src="edition.img_url" alt="Picture of the book" width="200" />
         <main>
-            <BookTitleAuthors :title="edition.title" :authors="authors">
+            <BookTitleAuthors
+                :title="edition.title"
+                :authors="authors"
+                :show-edit="user?.uid === edition.uploader"
+                @edit-click="showEditModal = true"
+            >
                 <h4>{{ edition.subtitle }}</h4>
             </BookTitleAuthors>
 
@@ -64,7 +77,7 @@ const showModal = ref(false);
                 </p>
                 <ul>
                     <li v-for="book in edition.books">
-                        <div>
+                        <div class="space-between">
                             <RouterLink :to="`/book/${book.id}`">
                                 <i> {{ book.title }} </i>
                             </RouterLink>
@@ -80,7 +93,7 @@ const showModal = ref(false);
 
             <template v-if="user">
                 <h3>Readings</h3>
-                <button @click="showModal = true">Add New Reading</button>
+                <button @click="showReadingModal = true">Add New Reading</button>
 
                 <table v-if="readings.length > 0">
                     <thead>
@@ -103,7 +116,10 @@ const showModal = ref(false);
 
             <!-- TODO: other relavent information -->
         </main>
-        <ModalReading v-model="showModal" :books="edition.books" :edition-doc="editionDoc" />
+        <ModalReading v-model="showReadingModal" :books="edition.books" :edition-doc="editionDoc" />
+        <VueFinalModal class="container" content-class="modal" v-model="showEditModal">
+            <EditionForm heading="Edit Edition" @submit="editEdition" v-bind="edition" />
+        </VueFinalModal>
     </div>
 </template>
 
@@ -115,10 +131,5 @@ const showModal = ref(false);
 
 img {
     align-self: flex-start;
-}
-
-li > div {
-    display: flex;
-    justify-content: space-between;
 }
 </style>

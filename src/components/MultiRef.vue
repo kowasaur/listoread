@@ -13,7 +13,7 @@ defineProps<{
 <template>
     <div class="form-input">
         <div class="multi-label">
-            <label :for="`${field}1`">{{ label }}{{ inputs.length > 1 ? "s" : "" }}</label>
+            <label :for="`${field}0`">{{ label }}{{ inputs.length > 1 ? "s" : "" }}</label>
             <button v-if="inputs.length > 1" type="button" @click="inputs.pop()">-</button>
             <button type="button" @click="inputs.push('')">+</button>
         </div>

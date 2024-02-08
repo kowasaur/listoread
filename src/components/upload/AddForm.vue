@@ -10,7 +10,7 @@ defineEmits<{ submit: [event: Event, uploader: string] }>();
     </UserForm>
 </template>
 
-<style scoped>
+<style>
 .add-form {
     margin: 2em;
     flex-grow: 1;

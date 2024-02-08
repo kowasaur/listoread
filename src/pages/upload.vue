@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { addDoc } from "firebase/firestore";
 import AddBook from "@/components/upload/AddBook.vue";
 import AddAuthor from "../components/upload/AddAuthor.vue";
-import AddEdition from "@/components/upload/AddEdition.vue";
 import AddPublisher from "@/components/upload/AddPublisher.vue";
 import RequireSignIn from "@/components/RequireSignIn.vue";
+import EditionForm from "@/components/upload/EditionForm.vue";
+import { editionsRef } from "@/firebase";
+
+async function editionSubmit(data: Record<string, any>) {
+    await addDoc(editionsRef, data);
+    alert("Edition uploaded successfully");
+}
 </script>
 
 <template>
@@ -13,7 +20,7 @@ import RequireSignIn from "@/components/RequireSignIn.vue";
             <AddAuthor />
             <AddPublisher />
             <AddBook />
-            <AddEdition />
+            <EditionForm heading="Upload Edition" class="add-form" @submit="editionSubmit" />
         </div>
     </RequireSignIn>
 </template>
