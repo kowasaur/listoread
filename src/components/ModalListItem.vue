@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { VueFinalModal } from "vue-final-modal";
 import { useCollection, useCurrentUser } from "vuefire";
-import { addDoc, doc, orderBy, query, where } from "firebase/firestore";
+import { addDoc, doc, orderBy } from "firebase/firestore";
 import { computed } from "vue";
-import UserForm from "@/components/UserForm.vue";
 import RefInput from "./RefInput.vue";
 import {
     listGroupsRef,
@@ -12,24 +10,29 @@ import {
     listItemsRef,
     type Edition,
     editionsRef,
+    whereUser,
 } from "@/firebase";
 import { inputValue } from "@/utils";
+import ModalForm from "./ModalForm.vue";
 
 const { initialGroup } = defineProps<{ initialGroup: string }>();
 const emit = defineEmits<{ submited: [] }>();
 
 const user = useCurrentUser();
-const whereUser = where("uploader", "==", user.value!.uid);
-const groups = useCollection<ListGroup>(query(listGroupsRef, whereUser, orderBy("order")));
+const groups = useCollection<ListGroup>(whereUser(listGroupsRef, user.value, orderBy("order")), {
+    ssrKey: "modal-user-groups",
+});
 
-const listItems = useCollection<ListItem>(query(listItemsRef, whereUser));
+const listItems = useCollection<ListItem>(whereUser(listItemsRef, user.value), {
+    ssrKey: "modal-list-items",
+});
 const userEditionIds = computed(() => listItems.value.map(l => l.edition.id));
 const allEditions = useCollection<Edition>(editionsRef);
 const editions = computed(() =>
     allEditions.value.filter(e => !userEditionIds.value.includes(e.id))
 );
 
-async function addListItem(_: Event, uploader: string) {
+async function addListItem(uploader: string) {
     const groupId = inputValue("item-group");
     await addDoc(listItemsRef, {
         uploader,
@@ -41,29 +44,18 @@ async function addListItem(_: Event, uploader: string) {
 </script>
 
 <template>
-    <VueFinalModal class="container" content-class="modal">
-        <UserForm title="Add Edition to List" @submit="addListItem">
-            <RefInput field="item-edition" label="Edition" :collection="editions" v-slot="{ doc }">
-                {{ doc.title }}
-            </RefInput>
-            <RefInput
-                :initial-value="initialGroup"
-                field="item-group"
-                label="Group"
-                :collection="groups"
-            >
-                <template #="{ doc }">{{ doc.name }}</template>
-                <template #extraOptions> <option value="other">Other</option> </template>
-            </RefInput>
-        </UserForm>
-    </VueFinalModal>
+    <ModalForm title="Add Edition to List" @submit="addListItem">
+        <RefInput field="item-edition" label="Edition" :collection="editions" v-slot="{ doc }">
+            {{ doc.title }}
+        </RefInput>
+        <RefInput
+            :initial-value="initialGroup"
+            field="item-group"
+            label="Group"
+            :collection="groups"
+        >
+            <template #="{ doc }">{{ doc.name }}</template>
+            <template #extraOptions> <option value="other">Other</option> </template>
+        </RefInput>
+    </ModalForm>
 </template>
-
-<style>
-.modal {
-    background-color: aliceblue;
-    padding: 3em;
-    border-radius: 0.35rem;
-    box-shadow: 0 0 1em;
-}
-</style>

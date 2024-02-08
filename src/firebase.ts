@@ -1,6 +1,14 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, type User } from "firebase/auth";
-import { Timestamp, collection, getFirestore, where } from "firebase/firestore";
+import {
+    Query,
+    QueryConstraint,
+    Timestamp,
+    collection,
+    getFirestore,
+    query,
+    where,
+} from "firebase/firestore";
 
 interface Doc {
     uploader: string;
@@ -47,7 +55,7 @@ export type LocalListGroup = ListGroup | Omit<ListGroup, "order" | "uploader">;
 export interface Reading extends Doc {
     edition: Edition;
     book: Book;
-    start?: Timestamp;
+    start: Timestamp | null;
     finish: Timestamp | null;
 }
 
@@ -72,5 +80,7 @@ export const listItemsRef = collection(db, "list_items");
 export const listGroupsRef = collection(db, "list_groups");
 export const readingsRef = collection(db, "readings");
 
-export const whereUser = (user: User | undefined | null) =>
-    where("uploader", "==", user?.uid ?? null);
+type MaybeUser = User | undefined | null;
+export function whereUser(qRef: Query, user: MaybeUser, ...constraints: QueryConstraint[]) {
+    return query(qRef, where("uploader", "==", user?.uid ?? null), ...constraints);
+}

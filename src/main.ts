@@ -1,5 +1,6 @@
 import "./assets/main.css";
 import "vue-final-modal/style.css";
+import "@vuepic/vue-datepicker/dist/main.css";
 
 import { createApp } from "vue";
 import { VueFire, VueFireAuth } from "vuefire";

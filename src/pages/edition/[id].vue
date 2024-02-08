@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useCollection, useCurrentUser, useDocument } from "vuefire";
-import { doc, query, where } from "firebase/firestore";
+import { doc, where } from "firebase/firestore";
 import { useRoute } from "vue-router/auto";
 import { readingsRef, editionsRef, type Edition, type Reading, whereUser } from "@/firebase";
 import { editionAuthors } from "@/utils";
 import BookTitleAuthors from "@/components/BookTitleAuthors.vue";
 import ToggleReading from "@/components/ToggleReading.vue";
 import ReadingRow from "@/components/ReadingRow.vue";
+import ModalReading from "@/components/ModalReading.vue";
 
 const route = useRoute("/edition/[id]");
 const user = useCurrentUser();
@@ -19,9 +20,11 @@ const notCollection = computed(() => edition.value?.books.length === 1);
 const authors = computed(() => (edition.value ? editionAuthors(edition.value) : []));
 
 const readings = useCollection<Reading>(
-    query(readingsRef, whereUser(user.value), where("edition", "==", editionDoc)),
+    whereUser(readingsRef, user.value, where("edition", "==", editionDoc)),
     { ssrKey: "edition/[id]" }
 );
+
+const showModal = ref(false);
 </script>
 
 <template>
@@ -77,7 +80,9 @@ const readings = useCollection<Reading>(
 
             <template v-if="user">
                 <h3>Readings</h3>
-                <table>
+                <button @click="showModal = true">Add New Reading</button>
+
+                <table v-if="readings.length > 0">
                     <thead>
                         <tr>
                             <th v-if="!notCollection">Book</th>
@@ -98,6 +103,7 @@ const readings = useCollection<Reading>(
 
             <!-- TODO: other relavent information -->
         </main>
+        <ModalReading v-model="showModal" :books="edition.books" :edition-doc="editionDoc" />
     </div>
 </template>
 
