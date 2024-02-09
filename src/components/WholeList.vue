@@ -9,12 +9,13 @@ import {
     where,
 } from "firebase/firestore";
 import { useCollection, useCurrentUser } from "vuefire";
-import { type ListGroup, listGroupsRef, type LocalListGroup } from "@/firebase";
+import { type ListGroup, listGroupsRef, type LocalListGroup, type FormListGroup } from "@/firebase";
 import Group from "./Group.vue";
 import TextInput from "./TextInput.vue";
 import { inputValue } from "@/utils";
 import Draggable from "vuedraggable";
 import { ref, watchEffect } from "vue";
+import ModalGroup from "./ModalGroup.vue";
 
 const OTHER: LocalListGroup = { name: "Other", id: "other", colour: "#e9e3c7" };
 
@@ -39,15 +40,12 @@ watchEffect(() => {
     }
 });
 
-async function createGroup(event: Event) {
+const showCreateModal = ref(false);
+
+async function createGroup(data: FormListGroup) {
     const { count: order } = (await getCountFromServer(groupCountRef)).data();
-    await addDoc(listGroupsRef, {
-        uploader: user.value!.uid,
-        order,
-        name: inputValue("group-name"),
-        colour: inputValue("group-colour"),
-    });
-    (<HTMLFormElement>event.target).reset();
+    await addDoc(listGroupsRef, { ...data, order });
+    showCreateModal.value = false;
 }
 
 type GroupChange = { moved: { element: LocalListGroup; newIndex: number; oldIndex: number } };
@@ -73,19 +71,12 @@ function groupMoved({ moved }: GroupChange) {
             <Group :group="element" />
         </template>
         <template #footer>
-            <div class="list-group">
-                <h2>Create New Group</h2>
-                <form @submit.prevent="createGroup">
-                    <TextInput field="group-name" label="Name" required />
-                    <div>
-                        <label for="group-colour">Colour</label>
-                        <input type="color" name="group-colour" id="group-colour" />
-                    </div>
-                    <button>Create New Group</button>
-                </form>
-            </div>
+            <button class="list-group invisi-button" @click="showCreateModal = true">
+                Create New Group
+            </button>
         </template>
     </Draggable>
+    <ModalGroup title="Create New Group" v-model="showCreateModal" @submit="createGroup" />
 </template>
 
 <style scoped>

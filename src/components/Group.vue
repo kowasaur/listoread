@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { listItemsRef, type ListItem, type LocalListGroup, listGroupsRef } from "@/firebase";
 import { doc, query, updateDoc, where } from "firebase/firestore";
 import { useCollection, useCurrentUser } from "vuefire";
-import GroupItem from "./GroupItem.vue";
 import Draggable from "vuedraggable";
 import { ref, watch } from "vue";
 import { useModal } from "vue-final-modal";
+import {
+    listItemsRef,
+    type ListItem,
+    type LocalListGroup,
+    listGroupsRef,
+    type FormListGroup,
+} from "@/firebase";
+import GroupItem from "./GroupItem.vue";
 import ModalListItem from "./ModalListItem.vue";
+import ModalGroup from "./ModalGroup.vue";
 
 const { group } = defineProps<{ group: LocalListGroup }>();
 
@@ -42,6 +49,13 @@ const { open, close } = useModal({
     component: ModalListItem,
     attrs: { initialGroup: group.id, onSubmited: () => close() },
 });
+
+const showEdit = ref(false);
+
+function editGroup(data: FormListGroup) {
+    updateDoc(groupRef!, data);
+    showEdit.value = false;
+}
 </script>
 
 <template>
@@ -55,13 +69,19 @@ const { open, close } = useModal({
         @change="itemMoved"
     >
         <template #header>
-            <h2>{{ group.name }}</h2>
+            <div class="space-between">
+                <h2>{{ group.name }}</h2>
+                <button v-if="group.id !== 'other'" class="invisi-button" @click="showEdit = true">
+                    Edit
+                </button>
+            </div>
         </template>
         <template #item="{ element }">
             <GroupItem :edition="element.edition" />
         </template>
         <template #footer>
-            <button @click="open">Add Edition</button>
+            <button @click="open" class="add-button invisi-button">Add Edition</button>
+            <ModalGroup title="Edit Group" v-bind="group" @submit="editGroup" v-model="showEdit" />
         </template>
     </Draggable>
 </template>
@@ -71,19 +91,10 @@ h2 {
     margin-bottom: 0.3em;
 }
 
-button {
+.add-button {
     width: 100%;
-    opacity: 50%;
     border-radius: 0.3rem;
     border: 1px solid black;
     padding: 0.2rem;
-}
-
-button:hover {
-    opacity: 70%;
-}
-
-button:active {
-    opacity: 90%;
 }
 </style>

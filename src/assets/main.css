@@ -66,3 +66,15 @@ h2 {
     display: flex;
     justify-content: space-between;
 }
+
+.invisi-button {
+    opacity: 50%;
+}
+
+.invisi-button:hover {
+    opacity: 70%;
+}
+
+.invisi-button:active {
+    opacity: 90%;
+}

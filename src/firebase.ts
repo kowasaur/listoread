@@ -51,6 +51,7 @@ export interface ListGroup extends Doc {
 }
 
 export type LocalListGroup = ListGroup | Omit<ListGroup, "order" | "uploader">;
+export type FormListGroup = Omit<ListGroup, "id" | "order">;
 
 export interface Reading extends Doc {
     edition: Edition;
