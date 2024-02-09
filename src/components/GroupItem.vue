@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { type Edition } from "@/firebase";
+import { capLength } from "@/utils";
 
 defineProps<{ edition: Edition }>();
 </script>
 
 <template>
     <div class="outer">
-        <img v-if="edition.img_url" :src="edition.img_url" alt="Cover of the Edition" height="50" />
+        <img v-if="edition.img_url" :src="edition.img_url" alt="Cover of the Edition" height="40" />
         <div class="inner">
             <RouterLink :to="'edition/' + edition.id">{{ edition.title }}</RouterLink>
             <div v-if="edition.books.length > 1" v-for="book in edition.books">
-                <RouterLink :to="`book/${book.id}`">{{ book.title }}</RouterLink>
+                <RouterLink :to="`book/${book.id}`">{{ capLength(book.title) }}</RouterLink>
             </div>
         </div>
     </div>
@@ -22,7 +23,11 @@ defineProps<{ edition: Edition }>();
     align-items: center;
     margin-top: 0.3em;
     margin-bottom: 0.3em;
-    padding: 0.5em;
+    padding: 0.4em;
+}
+
+.inner {
+    font-size: 0.9rem;
 }
 
 .inner > div {

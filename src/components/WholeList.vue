@@ -22,7 +22,9 @@ const OTHER: LocalListGroup = { name: "Other", id: "other", colour: "#e9e3c7" };
 const user = useCurrentUser();
 const whereUser = where("uploader", "==", user.value!.uid);
 
-const groups = useCollection<ListGroup>(query(listGroupsRef, whereUser, orderBy("order")));
+const groups = useCollection<ListGroup>(query(listGroupsRef, whereUser, orderBy("order")), {
+    ssrKey: "all-groups",
+});
 const groupCountRef = query(listGroupsRef, whereUser, where("order", ">=", 0));
 
 const localGroups = ref<LocalListGroup[]>([]);
@@ -95,7 +97,7 @@ main {
 }
 
 .list-group {
-    margin: 0.7em;
+    margin: 0.5em;
     padding: 0.7em;
     border-style: solid;
     border-width: 1px;

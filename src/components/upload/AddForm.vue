@@ -14,5 +14,6 @@ defineEmits<{ submit: [event: Event, uploader: string] }>();
 .add-form {
     margin: 2em;
     flex-grow: 1;
+    min-width: 16rem;
 }
 </style>

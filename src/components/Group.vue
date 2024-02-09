@@ -15,7 +15,7 @@ const groupRef = group.id === "other" ? null : doc(listGroupsRef, group.id);
 const listItems = useCollection<ListItem>(
     // the user thing is necessary for the Other group
     query(listItemsRef, where("group", "==", groupRef), where("uploader", "==", user.value!.uid)),
-    { wait: true }
+    { wait: true, ssrKey: "group-items" }
 );
 
 const localItems = ref<ListItem[]>([]);

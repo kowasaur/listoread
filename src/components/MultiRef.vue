@@ -17,7 +17,13 @@ defineProps<{
             <button v-if="inputs.length > 1" type="button" @click="inputs.pop()">-</button>
             <button type="button" @click="inputs.push('')">+</button>
         </div>
-        <select v-for="(_, i) in inputs" v-model="inputs[i]" :name="field + i" :id="field + i">
+        <select
+            v-for="(_, i) in inputs"
+            v-model="inputs[i]"
+            :name="field + i"
+            :id="field + i"
+            required
+        >
             <option value="" disabled>...</option>
             <option v-for="doc in collection" :key="doc.id" :value="doc.id">
                 <slot :doc="doc"></slot>

@@ -1,9 +1,8 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useCollection, useCurrentUser } from "vuefire";
 import { query, where } from "firebase/firestore";
 import { readingsRef, type Reading } from "@/firebase";
-import { fullName } from "@/utils";
-import { computed } from "vue";
 import WholeList from "@/components/WholeList.vue";
 import RequireSignIn from "@/components/RequireSignIn.vue";
 
@@ -12,7 +11,7 @@ const whereUser = where("uploader", "==", user.value?.uid ?? null);
 
 // TODO: consider having a collection just for marking things as finished/currently reading
 // for performance reasons (and just having the necessary info)
-const readings = useCollection<Reading>(query(readingsRef, whereUser));
+const readings = useCollection<Reading>(query(readingsRef, whereUser), { ssrKey: "all-readings" });
 const currentReads = computed(() => readings.value.filter(r => !r.finish));
 </script>
 

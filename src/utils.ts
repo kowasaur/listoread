@@ -26,3 +26,7 @@ export function formatDate(date?: Date): string {
     const day = date.toLocaleString("default", { day: "2-digit" });
     return `${year}-${month}-${day}`;
 }
+
+export function capLength(str: string, max: number = 60): string {
+    return str.length > max ? str.slice(0, max - 3) + "..." : str;
+}
