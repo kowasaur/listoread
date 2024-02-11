@@ -15,6 +15,7 @@ const user = useCurrentUser();
                 <RouterLink to="/">Home</RouterLink>
                 <RouterLink to="/upload">Upload</RouterLink>
                 <RouterLink to="/edition/all">Editions</RouterLink>
+                <RouterLink to="/backup">Backup</RouterLink>
                 <button v-if="user" @click="signOut(auth)">Sign Out</button>
                 <button v-else @click="signInWithPopup(auth, googleAuthProvider)">
                     Sign In With Google
