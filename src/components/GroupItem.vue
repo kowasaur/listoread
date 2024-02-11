@@ -1,16 +1,37 @@
 <script setup lang="ts">
-import { type Edition } from "@/firebase";
+import { computed } from "vue";
+import { doc, where } from "firebase/firestore";
+import { useCollection, useCurrentUser } from "vuefire";
+import { whereUser, type Edition, readingsRef, editionsRef, type Reading } from "@/firebase";
 import { capLength } from "@/utils";
 
-defineProps<{ edition: Edition }>();
+const props = defineProps<{ edition: Edition }>();
+
+const user = useCurrentUser();
+
+const readings = useCollection<Reading>(
+    whereUser(
+        readingsRef,
+        user.value,
+        where("edition", "==", doc(editionsRef, props.edition.id)),
+        where("finish", "!=", null)
+    ),
+    { ssrKey: "list item readings" }
+);
+
+const finished = computed(() => new Set(readings.value.map(r => r.book.id)));
 </script>
 
 <template>
-    <div class="outer">
+    <div class="outer" :class="{ faded: finished.size == edition.books.length }">
         <img v-if="edition.img_url" :src="edition.img_url" alt="Cover of the Edition" height="40" />
         <div class="inner">
             <RouterLink :to="'edition/' + edition.id">{{ edition.title }}</RouterLink>
-            <div v-if="edition.books.length > 1" v-for="book in edition.books">
+            <div
+                v-if="edition.books.length > 1"
+                v-for="book in edition.books"
+                :class="{ faded: finished.has(book.id) }"
+            >
                 <RouterLink :to="`book/${book.id}`">{{ capLength(book.title) }}</RouterLink>
             </div>
         </div>
@@ -50,5 +71,10 @@ defineProps<{ edition: Edition }>();
 img {
     /* Needs to be rem so font-size: 0 doesn't break the margin */
     margin-right: 0.4rem;
+}
+
+.faded {
+    opacity: 60%;
+    background-color: rgba(146, 146, 146, 0.096);
 }
 </style>

@@ -97,4 +97,8 @@ h2 {
     border: 1px solid black;
     padding: 0.2rem;
 }
+
+.space-between > button {
+    margin-left: 0.6rem;
+}
 </style>
