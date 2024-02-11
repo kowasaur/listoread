@@ -13,6 +13,24 @@
                     "order": "ASCENDING"
                 }
             ]
+        },
+        {
+            "collectionGroup": "readings",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "edition",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "uploader",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "finish",
+                    "order": "ASCENDING"
+                }
+            ]
         }
     ],
     "fieldOverrides": []

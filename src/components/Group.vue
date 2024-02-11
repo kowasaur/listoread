@@ -67,6 +67,8 @@ function editGroup(data: FormListGroup) {
         class="list-group"
         :style="{ backgroundColor: group.colour }"
         @change="itemMoved"
+        :delay="300"
+        delayOnTouchOnly="true"
     >
         <template #header>
             <div class="space-between">

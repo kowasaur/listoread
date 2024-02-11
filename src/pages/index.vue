@@ -57,4 +57,10 @@ img {
 h5 {
     margin-top: 0;
 }
+
+@media (max-width: 40rem) {
+    .homepage {
+        flex-direction: column;
+    }
+}
 </style>

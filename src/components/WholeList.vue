@@ -66,7 +66,15 @@ function groupMoved({ moved }: GroupChange) {
 </script>
 
 <template>
-    <Draggable v-model="localGroups" item-key="id" tag="main" @change="groupMoved" group="groups">
+    <Draggable
+        v-model="localGroups"
+        item-key="id"
+        tag="main"
+        @change="groupMoved"
+        group="groups"
+        :delay="300"
+        delayOnTouchOnly="true"
+    >
         <template #item="{ element }">
             <Group :group="element" />
         </template>
