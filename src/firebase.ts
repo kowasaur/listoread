@@ -60,6 +60,11 @@ export interface Reading extends Doc {
     finish: Timestamp | null;
 }
 
+export interface Note extends Doc {
+    book: Book;
+    note: string;
+}
+
 export const firebaseApp = initializeApp({
     apiKey: "AIzaSyAOME21OHL--AeH35Sgonr_F4md7TKkz0s",
     authDomain: "listoread.firebaseapp.com",
@@ -80,6 +85,7 @@ export const editionsRef = collection(db, "editions");
 export const listItemsRef = collection(db, "list_items");
 export const listGroupsRef = collection(db, "list_groups");
 export const readingsRef = collection(db, "readings");
+export const notesRef = collection(db, "notes");
 
 type MaybeUser = User | undefined | null;
 export function whereUser(qRef: Query, user: MaybeUser, ...constraints: QueryConstraint[]) {
