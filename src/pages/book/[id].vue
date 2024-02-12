@@ -10,7 +10,8 @@ const route = useRoute("/book/[id]");
 const user = useCurrentUser();
 
 const bookDoc = doc(booksRef, route.params.id);
-const noteDoc = doc(notesRef, booksRef.id + user.value?.uid);
+
+const noteDoc = doc(notesRef, route.params.id + user.value?.uid);
 const { pending, data: book } = useDocument<Book>(bookDoc);
 const note = useDocument<Note>(noteDoc);
 

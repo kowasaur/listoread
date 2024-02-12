@@ -27,7 +27,13 @@ async function submit(uploader: string) {
 
 <template>
     <ModalForm title="Add New Reading" @submit="submit" v-model="show">
-        <RefInput field="reading-book" label="Book" :collection="books" v-slot="{ doc }">
+        <RefInput
+            field="reading-book"
+            label="Book"
+            :collection="books"
+            v-slot="{ doc }"
+            :initial-value="books[0].id"
+        >
             {{ doc.title }}
         </RefInput>
 

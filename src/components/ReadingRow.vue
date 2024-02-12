@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { deleteDoc, doc } from "firebase/firestore";
 import { readingsRef, type Reading } from "@/firebase";
 import { formatDate } from "@/utils";
+import DateText from "./DateText.vue";
 
 const { reading } = defineProps<{
     notCollection: boolean;
@@ -36,8 +37,8 @@ function deleteThis() {
             </td>
         </template>
         <template v-else>
-            <td>{{ reading.start?.toDate().toLocaleDateString("en-au") }}</td>
-            <td>{{ reading.finish?.toDate().toLocaleDateString("en-au") }}</td>
+            <td><DateText :date="reading.start" /></td>
+            <td><DateText :date="reading.finish" /></td>
             <td>
                 <button @click="editing = true">Edit</button>
                 <button @click="deleteThis">Delete</button>

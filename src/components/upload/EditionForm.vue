@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useCollection } from "vuefire";
-import { doc } from "firebase/firestore";
+import { doc, orderBy, query } from "firebase/firestore";
 import { booksRef, type Book, type Publisher, type Edition, publishersRef } from "@/firebase";
 import { inputValue } from "@/utils";
 import TextInput from "../TextInput.vue";
@@ -13,8 +13,10 @@ import UserForm from "../UserForm.vue";
 const { books } = defineProps<{ heading: string } & Partial<Omit<Edition, "id" | "uploader">>>();
 const emit = defineEmits<{ submit: [data: Record<string, any>] }>();
 
-const allBooks = useCollection<Book>(booksRef);
-const publishers = useCollection<Publisher>(publishersRef);
+const allBooks = useCollection<Book>(query(booksRef, orderBy("title")), { ssrKey: "all-books" });
+const publishers = useCollection<Publisher>(query(publishersRef, orderBy("publisher")), {
+    ssrKey: "all-publishers",
+});
 
 const selectedBooks = ref<string[]>(books?.map(b => b.id) ?? [""]);
 

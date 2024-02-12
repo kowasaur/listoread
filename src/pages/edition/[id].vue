@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useCollection, useCurrentUser, useDocument } from "vuefire";
-import { doc, setDoc, where } from "firebase/firestore";
+import { doc, orderBy, setDoc, where } from "firebase/firestore";
 import { useRoute } from "vue-router/auto";
 import { VueFinalModal } from "vue-final-modal";
 import { readingsRef, editionsRef, type Edition, type Reading, whereUser } from "@/firebase";
@@ -22,7 +22,7 @@ const notCollection = computed(() => edition.value?.books.length === 1);
 const authors = computed(() => (edition.value ? editionAuthors(edition.value) : []));
 
 const readings = useCollection<Reading>(
-    whereUser(readingsRef, user.value, where("edition", "==", editionDoc)),
+    whereUser(readingsRef, user.value, where("edition", "==", editionDoc), orderBy("finish")),
     { ssrKey: "edition/[id]" }
 );
 

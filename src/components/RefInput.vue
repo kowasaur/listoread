@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T">
 import { type VueFirestoreQueryData } from "vuefire";
 
-const { collection } = defineProps<{
+defineProps<{
     field: string;
     label: string;
     collection: VueFirestoreQueryData<T>;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useCollection } from "vuefire";
-import { addDoc, doc } from "firebase/firestore";
+import { addDoc, doc, orderBy, query } from "firebase/firestore";
 import { ref } from "vue";
 import { authorsRef, booksRef, type Author } from "@/firebase";
 import { fullName, getInputById, inputValue } from "@/utils";
@@ -10,7 +10,9 @@ import MultiRef from "../MultiRef.vue";
 
 // TODO: https://stackoverflow.com/questions/46568142/google-firestore-query-on-substring-of-a-property-value-text-search
 // Current implementation will not work well once there's a lot of authors
-const allAuthors = useCollection<Author>(authorsRef);
+const allAuthors = useCollection<Author>(query(authorsRef, orderBy("surname")), {
+    ssrKey: "all-authors",
+});
 
 const selectedAuthors = ref<string[]>([""]);
 
