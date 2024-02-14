@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useCollection, useCurrentUser, useDocument } from "vuefire";
 import { doc, orderBy, setDoc, where } from "firebase/firestore";
 import { useRoute } from "vue-router/auto";
@@ -28,6 +28,9 @@ const readings = useCollection<Reading>(
 
 const showReadingModal = ref(false);
 const showEditModal = ref(false);
+const editBooks = ref<string[]>([""]);
+
+watch(edition, () => (editBooks.value = edition.value!.books.map(b => b.id)), { deep: true });
 
 async function editEdition(data: Record<string, any>) {
     await setDoc(editionDoc, data);
@@ -118,7 +121,12 @@ async function editEdition(data: Record<string, any>) {
         </main>
         <ModalReading v-model="showReadingModal" :books="edition.books" :edition-doc="editionDoc" />
         <VueFinalModal class="container" content-class="modal" v-model="showEditModal">
-            <EditionForm heading="Edit Edition" @submit="editEdition" v-bind="edition" />
+            <EditionForm
+                heading="Edit Edition"
+                @submit="editEdition"
+                v-bind="edition"
+                v-model="editBooks"
+            />
         </VueFinalModal>
     </div>
 </template>

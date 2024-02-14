@@ -5,8 +5,11 @@ export const getInputById = (id: string) => <HTMLInputElement>document.getElemen
 export const inputValue = (id: string) => getInputById(id).value.trim();
 
 export function fullName(author: Author) {
-    if (author.surname_first) return `${author.surname} ${author.given_name}`;
-    return `${author.given_name} ${author.surname}`;
+    let first = author.given_name;
+    let last = author.surname;
+    if (author.surname_first) [first, last] = [last, first];
+    if (first !== "") first += " ";
+    return first + last;
 }
 
 export function editionAuthors(edition: Edition) {

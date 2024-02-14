@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useCollection } from "vuefire";
 import { doc, orderBy, query } from "firebase/firestore";
 import { booksRef, type Book, type Publisher, type Edition, publishersRef } from "@/firebase";
@@ -10,15 +9,14 @@ import RefInput from "../RefInput.vue";
 import UserForm from "../UserForm.vue";
 
 // keyof Doc can't be used because of Vue Typescript compiler limitations
-const { books } = defineProps<{ heading: string } & Partial<Omit<Edition, "id" | "uploader">>>();
+defineProps<{ heading: string } & Partial<Omit<Edition, "id" | "uploader" | "books">>>();
 const emit = defineEmits<{ submit: [data: Record<string, any>] }>();
+const selectedBooks = defineModel<string[]>({ required: true });
 
 const allBooks = useCollection<Book>(query(booksRef, orderBy("title")), { ssrKey: "all-books" });
 const publishers = useCollection<Publisher>(query(publishersRef, orderBy("publisher")), {
     ssrKey: "all-publishers",
 });
-
-const selectedBooks = ref<string[]>(books?.map(b => b.id) ?? [""]);
 
 function handleSubmit(event: Event, uploader: string) {
     const data: Record<string, any> = {
