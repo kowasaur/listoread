@@ -2,7 +2,7 @@
 import { useCollection, useCurrentUser } from "vuefire";
 import { addDoc, doc, orderBy } from "firebase/firestore";
 import { computed } from "vue";
-import RefInput from "./RefInput.vue";
+import RefInput from "@/components/input/RefInput.vue";
 import {
     listGroupsRef,
     type ListGroup,

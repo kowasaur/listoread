@@ -53,11 +53,12 @@ export interface ListGroup extends Doc {
 export type LocalListGroup = ListGroup | Omit<ListGroup, "order" | "uploader">;
 export type FormListGroup = Omit<ListGroup, "id" | "order">;
 
+export type Datey = Timestamp | number | null;
 export interface Reading extends Doc {
     edition: Edition;
     book: Book;
     start: Timestamp | null;
-    finish: Timestamp | null;
+    finish: Datey;
 }
 
 export interface Note extends Doc {

@@ -2,7 +2,7 @@
 import { addDoc } from "firebase/firestore";
 import { publishersRef } from "@/firebase";
 import { getInputById, inputValue } from "@/utils";
-import TextInput from "@/components/TextInput.vue";
+import TextInput from "@/components/input/TextInput.vue";
 import AddForm from "./AddForm.vue";
 
 async function publisherSubmit(event: Event, uploader: string) {

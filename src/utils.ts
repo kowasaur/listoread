@@ -1,4 +1,4 @@
-import type { Author, Edition } from "./firebase";
+import type { Author, Edition, Datey } from "./firebase";
 
 export const getInputById = (id: string) => <HTMLInputElement>document.getElementById(id);
 
@@ -22,14 +22,16 @@ export function editionAuthors(edition: Edition) {
 }
 
 // Format to YYYY-MM-DD
-export function formatDate(date?: Date): string {
-    if (date === undefined) return "";
-    const year = date.getFullYear();
-    const month = date.toLocaleString("default", { month: "2-digit" });
-    const day = date.toLocaleString("default", { day: "2-digit" });
+export function formatDate(date: Datey): string {
+    if (!date) return "";
+    if (typeof date === "number") return date.toString();
+    const d = date.toDate();
+    const year = d.getFullYear();
+    const month = d.toLocaleString("default", { month: "2-digit" });
+    const day = d.toLocaleString("default", { day: "2-digit" });
     return `${year}-${month}-${day}`;
 }
 
-export function capLength(str: string, max: number = 60): string {
+export function capLength(str: string, max: number = 50): string {
     return str.length > max ? str.slice(0, max - 3) + "..." : str;
 }

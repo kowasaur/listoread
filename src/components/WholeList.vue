@@ -11,8 +11,6 @@ import {
 import { useCollection, useCurrentUser } from "vuefire";
 import { type ListGroup, listGroupsRef, type LocalListGroup, type FormListGroup } from "@/firebase";
 import Group from "./Group.vue";
-import TextInput from "./TextInput.vue";
-import { inputValue } from "@/utils";
 import Draggable from "vuedraggable";
 import { ref, watchEffect } from "vue";
 import ModalGroup from "./ModalGroup.vue";

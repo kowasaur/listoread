@@ -3,8 +3,8 @@ import { useCollection } from "vuefire";
 import { doc, orderBy, query } from "firebase/firestore";
 import { type Book, authorsRef, type Author } from "@/firebase";
 import { fullName, getInputById, inputValue } from "@/utils";
-import TextInput from "../TextInput.vue";
-import MultiRef from "../MultiRef.vue";
+import TextInput from "@/components/input/TextInput.vue";
+import MultiRef from "@/components/input/MultiRef.vue";
 import UserForm from "../UserForm.vue";
 
 defineProps<{ heading: string } & Partial<Pick<Book, "title">>>();

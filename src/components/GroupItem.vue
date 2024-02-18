@@ -45,6 +45,7 @@ const finished = computed(() => new Set(readings.value.map(r => r.book.id)));
     margin-top: 0.3em;
     margin-bottom: 0.3em;
     padding: 0.4em;
+    max-width: 21rem;
 }
 
 .inner {

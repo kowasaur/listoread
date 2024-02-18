@@ -1,11 +1,18 @@
-<script setup lang="ts">
-import type { Timestamp } from "firebase/firestore";
+<script lang="ts">
+function title(date: Datey) {
+    if (typeof date === "number") return;
+    return date?.toDate().toLocaleString("en-au", { minute: "2-digit", hour: "numeric" });
+}
+</script>
 
-defineProps<{ date: Timestamp | null }>();
+<script setup lang="ts">
+import type { Datey } from "@/firebase";
+
+defineProps<{ date: Datey }>();
 </script>
 
 <template>
-    <span :title="date?.toDate().toLocaleString('en-au', { minute: '2-digit', hour: 'numeric' })">
-        {{ date?.toDate().toLocaleDateString("en-au") }}
+    <span :title="title(date)">
+        {{ typeof date === "number" ? date : date?.toDate().toLocaleDateString("en-au") }}
     </span>
 </template>

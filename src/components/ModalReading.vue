@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { addDoc, doc, type DocumentReference } from "firebase/firestore";
-import DateInput from "./DateInput.vue";
-import ModalForm from "./ModalForm.vue";
-import RefInput from "./RefInput.vue";
 import { readingsRef, booksRef, type Book } from "@/firebase";
 import { inputValue } from "@/utils";
+import DateInput from "@/components/input/DateInput.vue";
+import RefInput from "@/components/input/RefInput.vue";
+import ModalForm from "@/components/ModalForm.vue";
 
 const { editionDoc } = defineProps<{ books: Book[]; editionDoc: DocumentReference }>();
 const show = defineModel<boolean>({ required: true });
 
 const start = ref<Date>();
-const finish = ref<Date>();
+const finish = ref<Date | number>();
 
 async function submit(uploader: string) {
     await addDoc(readingsRef, {
@@ -38,6 +38,6 @@ async function submit(uploader: string) {
         </RefInput>
 
         <DateInput field="start" label="Start" v-model="start" />
-        <DateInput field="finish" label="Finish" v-model="finish" :start-date="start" />
+        <DateInput field="finish" label="Finish" v-model="finish" :start-date="start" can-year />
     </ModalForm>
 </template>

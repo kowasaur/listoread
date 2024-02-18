@@ -2,7 +2,7 @@
 import { inputValue } from "@/utils";
 import { type FormListGroup } from "@/firebase";
 import ModalForm from "./ModalForm.vue";
-import TextInput from "./TextInput.vue";
+import TextInput from "@/components/input/TextInput.vue";
 
 defineProps<{ title: string; name?: string; colour?: string }>();
 const emit = defineEmits<{ submit: [data: FormListGroup] }>();

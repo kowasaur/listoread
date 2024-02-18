@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Author } from "@/firebase";
 import { getInputById, inputValue } from "@/utils";
-import TextInput from "../TextInput.vue";
+import TextInput from "@/components/input/TextInput.vue";
 import UserForm from "../UserForm.vue";
+import Checkbox from "@/components/input/Checkbox.vue";
 
 defineProps<{ heading: string } & Partial<Omit<Author, "uploader" | "id">>>();
 const emit = defineEmits<{ submit: [data: Omit<Author, "id">] }>();
@@ -24,16 +25,6 @@ function handleSubmit({ target }: Event, uploader: string) {
     <UserForm :title="heading" @submit="handleSubmit">
         <TextInput field="given_name" label="Given Name" />
         <TextInput field="surname" label="Surname" required />
-        <div class="checkbox">
-            <input type="checkbox" name="surname_first" id="surname_first" />
-            <label for="surname_first">Surname should display first</label>
-        </div>
+        <Checkbox field="surname_first" label="Surname should display first" />
     </UserForm>
 </template>
-
-<style scoped>
-.checkbox {
-    display: flex;
-    margin-bottom: 0.5em;
-}
-</style>

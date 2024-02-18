@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useCollection, useCurrentUser, useDocument } from "vuefire";
 import { doc, orderBy, setDoc, where } from "firebase/firestore";
 import { useRoute } from "vue-router/auto";

@@ -3,9 +3,9 @@ import { useCollection } from "vuefire";
 import { doc, orderBy, query } from "firebase/firestore";
 import { booksRef, type Book, type Publisher, type Edition, publishersRef } from "@/firebase";
 import { inputValue } from "@/utils";
-import TextInput from "../TextInput.vue";
-import MultiRef from "../MultiRef.vue";
-import RefInput from "../RefInput.vue";
+import TextInput from "@/components/input/TextInput.vue";
+import MultiRef from "@/components/input/MultiRef.vue";
+import RefInput from "@/components/input/RefInput.vue";
 import UserForm from "../UserForm.vue";
 
 // keyof Doc can't be used because of Vue Typescript compiler limitations

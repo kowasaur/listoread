@@ -11,8 +11,8 @@ const { reading } = defineProps<{
 }>();
 
 const editing = ref(false);
-const start = ref(formatDate(reading.start?.toDate()));
-const finish = ref(formatDate(reading.finish?.toDate()));
+const start = ref(formatDate(reading.start));
+const finish = ref(formatDate(reading.finish));
 
 const docRef = doc(readingsRef, reading.id);
 
