@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { doc, setDoc } from "firebase/firestore";
 import { useCurrentUser, useDocument } from "vuefire";
 import { useRoute } from "vue-router/auto";
@@ -15,7 +15,9 @@ const noteDoc = doc(notesRef, route.params.id + user.value?.uid);
 const { pending, data: book } = useDocument<Book>(bookDoc);
 const note = useDocument<Note>(noteDoc);
 
-const text = ref(note.value?.note ?? "");
+const text = ref("");
+watch(note, () => note.value && (text.value = note.value?.note));
+
 const editing = ref(false);
 
 function saveNote() {
@@ -48,7 +50,6 @@ function saveNote() {
                     v-model="text"
                     name="notes"
                     id="notes"
-                    cols="100"
                     rows="30"
                 ></textarea>
                 <p v-else>{{ note?.note }}</p>
@@ -68,5 +69,13 @@ h3 {
 
 .cancel {
     margin-right: 0.2rem;
+}
+
+p {
+    white-space: pre-line;
+}
+
+textarea {
+    width: 100%;
 }
 </style>
