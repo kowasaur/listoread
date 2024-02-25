@@ -31,6 +31,20 @@
                     "order": "ASCENDING"
                 }
             ]
+        },
+        {
+            "collectionGroup": "readings",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "uploader",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "start",
+                    "order": "ASCENDING"
+                }
+            ]
         }
     ],
     "fieldOverrides": []
