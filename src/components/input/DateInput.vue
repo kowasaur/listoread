@@ -5,18 +5,19 @@ import Checkbox from "@/components/input/Checkbox.vue";
 
 defineProps<{
     field: string;
-    label: string;
+    label?: string;
     startDate?: Date;
     canYear?: boolean;
+    hideLabel?: boolean;
 }>();
 
 const date = defineModel<Date | number>();
-const yearPicker = ref(false);
+const yearPicker = ref(typeof date.value === "number");
 </script>
 
 <template>
     <div class="form-input">
-        <label :for="`dp-input-${field}`">{{ label }}</label>
+        <label v-if="!hideLabel" :for="`dp-input-${field}`">{{ label }}</label>
         <VueDatePicker
             :uid="field"
             :name="field"

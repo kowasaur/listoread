@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { deleteDoc, doc } from "firebase/firestore";
-import { readingsRef, type Reading } from "@/firebase";
-import { formatDate } from "@/utils";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { readingsRef, type Reading, type Datey } from "@/firebase";
 import DateText from "./DateText.vue";
+import DateInput from "./input/DateInput.vue";
 
 const { reading } = defineProps<{
     notCollection: boolean;
     reading: Reading;
 }>();
 
+const dateVal = (d: Datey) => (typeof d === "number" ? new Date(d, 0) : d?.toDate());
+
 const editing = ref(false);
-const start = ref(formatDate(reading.start));
-const finish = ref(formatDate(reading.finish));
+const start = ref<Date | number | undefined>(dateVal(reading.start));
+const finish = ref<Date | number | undefined>(dateVal(reading.finish));
 
 const docRef = doc(readingsRef, reading.id);
 
 async function save() {
-    console.log(start.value);
+    // TODO: make this work when you remove finish or start
+    await updateDoc(docRef, { start: start.value, finish: finish.value });
+    editing.value = false;
 }
 
 function deleteThis() {
@@ -29,8 +33,10 @@ function deleteThis() {
     <tr>
         <td v-if="!notCollection">{{ reading.book.title }}</td>
         <template v-if="editing">
-            <td><input type="date" v-model="start" /></td>
-            <td><input type="date" v-model="finish" /></td>
+            <td><DateInput :field="`${reading.id}start`" v-model="start" hide-label /></td>
+            <td>
+                <DateInput :field="`${reading.id}finish`" v-model="finish" hide-label can-year />
+            </td>
             <td>
                 <button @click="save">Save</button>
                 <button @click="editing = false">Cancel</button>
