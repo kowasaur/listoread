@@ -13,6 +13,7 @@ const user = useCurrentUser();
         <header>
             <nav>
                 <RouterLink to="/">Home</RouterLink>
+                <RouterLink to="/stats">Stats</RouterLink>
                 <RouterLink to="/upload">Upload</RouterLink>
                 <RouterLink to="/edition/all">Editions</RouterLink>
                 <RouterLink to="/backup">Backup</RouterLink>

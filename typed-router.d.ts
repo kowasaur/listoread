@@ -45,6 +45,7 @@ declare module 'vue-router/auto/routes' {
     '/book/[id]': RouteRecordInfo<'/book/[id]', '/book/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/edition/[id]': RouteRecordInfo<'/edition/[id]', '/edition/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/edition/all': RouteRecordInfo<'/edition/all', '/edition/all', Record<never, never>, Record<never, never>>,
+    '/stats': RouteRecordInfo<'/stats', '/stats', Record<never, never>, Record<never, never>>,
     '/upload': RouteRecordInfo<'/upload', '/upload', Record<never, never>, Record<never, never>>,
   }
 }
